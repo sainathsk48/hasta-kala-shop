@@ -58,7 +58,7 @@ def reset_data():
 # --- SIDEBAR NAVIGATION ---
 st.sidebar.title("🎨 Hasta-Kala")
 st.sidebar.markdown("---")
-page = st.sidebar.radio("Navigation", ["Dashboard", "Quick Bill", "Income Log"])
+page = st.sidebar.radio("Navigation", ["Dashboard", "Quick Bill", "Income Log", "Restock Inventory"])
 
 if st.sidebar.button("🗑️ Reset All Data"):
     reset_data()
@@ -200,3 +200,32 @@ elif page == "Income Log":
         )
     else:
         st.info("No transactions found.")
+
+# --- RESTOCK INVENTORY ---
+elif page == "Restock Inventory":
+    st.title("Restock Inventory 🛠️")
+    st.markdown("Update your stock levels after producing new items.")
+
+    col_p, col_c, col_q = st.columns([2, 1, 1])
+    
+    with col_p:
+        st.markdown("#### 1. Select Product")
+        p_name = st.selectbox("Product", [p['name'] for p in PRODUCTS])
+    
+    with col_c:
+        st.markdown("#### 2. Color")
+        c_name = st.selectbox("Color", COLORS)
+    
+    with col_q:
+        st.markdown("#### 3. New Units")
+        new_qty = st.number_input("Quantity Made", min_value=1, value=5)
+
+    sku = f"{p_name}-{c_name}"
+    current = st.session_state.inventory.get(sku, 0)
+    
+    st.info(f"Current Stock for {sku}: **{current}**")
+
+    if st.button(f"Update {sku} Stock"):
+        st.session_state.inventory[sku] = current + new_qty
+        st.success(f"Added {new_qty} units! New total for {sku}: **{st.session_state.inventory[sku]}**")
+        st.balloons()
