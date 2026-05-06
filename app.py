@@ -18,7 +18,7 @@ st.markdown("""
     .metric-card { background-color: #C05C3E; color: white; padding: 20px; border-radius: 16px; margin-bottom: 20px; }
     .insight-card { background-color: #FFF9F2; border-left: 5px solid #F7B32B; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
     </style>
-    """, unsafe_allow_stdio=True)
+    """, unsafe_allow_html=True)
 
 # --- DATA INITIALIZATION ---
 PRODUCTS = [
@@ -79,7 +79,7 @@ if page == "Dashboard":
                 <p style="opacity: 0.8; margin: 0;">Total Revenue</p>
                 <h1 style="margin: 0; color: white;">₹{total_rev:,.2f}</h1>
             </div>
-        """, unsafe_allow_stdio=True)
+        """, unsafe_allow_html=True)
 
         if not df.empty:
             # Insights
@@ -93,7 +93,7 @@ if page == "Dashboard":
                         Consider increasing production of this item!
                     </p>
                 </div>
-            """, unsafe_allow_stdio=True)
+            """, unsafe_allow_html=True)
 
     with col2:
         if not df.empty:
