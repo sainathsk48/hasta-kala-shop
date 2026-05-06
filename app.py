@@ -38,12 +38,14 @@ if 'inventory' not in st.session_state:
 def add_sale(item, color, price):
     sku = f"{item}-{color}"
     if st.session_state.inventory.get(sku, 0) > 0:
+        # Adjust for IST (UTC + 5:30)
+        ist_time = datetime.now() + timedelta(hours=5, minutes=30)
         new_sale = {
-            "id": datetime.now().timestamp(),
+            "id": ist_time.timestamp(),
             "item": item,
             "color": color,
             "price": price,
-            "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            "date": ist_time.strftime("%Y-%m-%d %H:%M:%S")
         }
         st.session_state.sales.append(new_sale)
         st.session_state.inventory[sku] -= 1
