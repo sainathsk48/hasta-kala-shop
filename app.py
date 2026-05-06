@@ -71,6 +71,13 @@ if page == "Dashboard":
     df = pd.DataFrame(st.session_state.sales)
     total_rev = df['price'].sum() if not df.empty else 0
 
+    # --- GLOBAL STOCK ALERT ---
+    stock_df = pd.DataFrame(st.session_state.inventory.items(), columns=['SKU', 'Stock'])
+    low_stock = stock_df[stock_df['Stock'] <= 2]
+    if not low_stock.empty:
+        for _, row in low_stock.iterrows():
+            st.error(f"🚨 **Stock Alert**: Only {row['Stock']} {row['SKU']} left — time to make more!")
+
     col1, col2 = st.columns([1, 2])
 
     with col1:
@@ -131,14 +138,10 @@ if page == "Dashboard":
             st.info("No sales yet. Go to 'Quick Bill' to log your first sale!")
 
     with col4:
-        st.markdown("### Stock Status")
-        stock_df = pd.DataFrame(st.session_state.inventory.items(), columns=['SKU', 'Stock'])
-        low_stock = stock_df[stock_df['Stock'] <= 2]
+        st.markdown("### Stock Inventory")
         if not low_stock.empty:
-            for _, row in low_stock.iterrows():
-                st.warning(f"⚠️ **Low Stock**: Only {row['Stock']} left of {row['SKU']}!")
-        else:
-            st.success("All items are well-stocked! ✅")
+            st.info("Check the alerts at the top of the dashboard for specific items.")
+        st.dataframe(stock_df.sort_values('Stock'), use_container_width=True)
 
 # --- QUICK BILL ---
 elif page == "Quick Bill":
